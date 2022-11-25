@@ -111,7 +111,7 @@ class RoadData_test_set(Dataset):
 
         return image
 
-def get_test_loader(num_workers, pin_memory):
+def get_test_loader(batch_size, num_workers, pin_memory):
 
     image_height = 600  #  400 pixels originally
     image_width = 600  #  400 pixels originally
@@ -125,7 +125,7 @@ def get_test_loader(num_workers, pin_memory):
 
     test_loader = DataLoader(
         test_dataset,
-        batch_size=1,
+        batch_size=batch_size,
         num_workers=num_workers,
         pin_memory=pin_memory,
         shuffle=False

@@ -28,7 +28,7 @@ def run_training(num_epochs, lr, batch_size, dict_double_conv, dict_ups, device=
     image_height = 600  #  400 pixels originally
     image_width = 600  #  400 pixels originally
 
-    train_transform = get_transform(image_height, image_width, 35, 0.5, 0.1, True, 0, 0)
+    train_transform = get_transform(image_height, image_width, 35, 0.5, 0.1, True, 0, image_height/2)
 
     val_transform = get_transform(image_height, image_width, 0, 0, 0, True, 0, 0)
 

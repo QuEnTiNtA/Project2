@@ -111,7 +111,7 @@ class RoadData_test_set(Dataset):
 
         return image
 
-def get_test_loader(num_workers, pin_memory):
+def get_test_loader( num_workers, pin_memory):
 
     image_height = 600  #  400 pixels originally
     image_width = 600  #  400 pixels originally
