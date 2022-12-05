@@ -60,7 +60,6 @@ def train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler, schedule
 def check_F1_score(val_loader, model, epoch):
     TP = 0
     FP = 0
-    TN = 0
     FN = 0
     num_correct = 0
     num_pixels = 0
@@ -72,7 +71,7 @@ def check_F1_score(val_loader, model, epoch):
             y = y.to(device=DEVICE).unsqueeze(1) # the grayscale does not have channels, add
             preds = torch.sigmoid(model(x))
             preds = (preds > 0.5).float()
-            #print(TP,FP,FN,preds.sum())
+            
             TP += ((preds == 1)*(y==1)).sum()
             FP += ((preds == 1)*(y==0)).sum()
             FN += ((preds == 0)*(y==1)).sum()

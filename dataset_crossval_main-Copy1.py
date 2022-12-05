@@ -68,7 +68,7 @@ def get_transform(
             max_pixel_value=237.0, # dividing by 237, get a value between 0 and 1
         ))
     if(cwidth > 0):
-        transformations.append(A.RandomCrop(width=cwidth, height=cheight))
+        transformations.append(A.RandomCrop(width=cwidth, height=cheight,p=0.5))
     transformations.append(ToTensorV2())
     return A.Compose(transformations)
 
@@ -172,7 +172,7 @@ class UNET(nn.Module):
             x = self.ups[idx+1](concat_skip)
 
         return self.final_conv(x)
-    
+
 class UNET_no_skip_connection(nn.Module):
     def __init__(
             self, in_channels=3, out_channels=1, features=[64, 128, 256, 512],
@@ -223,7 +223,7 @@ class UNET_no_skip_connection(nn.Module):
         return self.final_conv(x)
 
 
-def train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler, scheduler):
+def train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler, scheduler=''):
     loop = tqdm(train_loader)
 
     TP = 0
@@ -234,6 +234,8 @@ def train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler, schedule
     num_pixels = 0
 
     for batch_idx, (data, targets) in enumerate(loop):
+        if batch_idx%2 ==0:
+            print(data.shape)
         data = data.to(device=DEVICE)
         targets = targets.float().unsqueeze(1).to(device=DEVICE) # add a channel dimension
         # forward
@@ -241,7 +243,7 @@ def train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler, schedule
             output = model(data)
             loss = loss_fn(output, targets)
             
-        scheduler.step(loss)
+        #scheduler.step(loss)
         
         # backward
         optimizer.zero_grad()
@@ -274,7 +276,6 @@ def train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler, schedule
 def check_F1_score(val_loader, model, epoch):
     TP = 0
     FP = 0
-    TN = 0
     FN = 0
     num_correct = 0
     num_pixels = 0
@@ -286,7 +287,7 @@ def check_F1_score(val_loader, model, epoch):
             y = y.to(device=DEVICE).unsqueeze(1) # the grayscale does not have channels, add
             preds = torch.sigmoid(model(x))
             preds = (preds > 0.5).float()
-            #print(TP,FP,FN,preds.sum())
+            
             TP += ((preds == 1)*(y==1)).sum()
             FP += ((preds == 1)*(y==0)).sum()
             FN += ((preds == 0)*(y==1)).sum()
@@ -337,7 +338,7 @@ def run_training(num_epochs, lr, batch_size, dict_double_conv, dict_ups, device=
     for fold, (train_idx,val_idx) in enumerate(splits.split(train_dataset)):
 
         # print('Fold {}'.format(fold + 1))
-        print('--------------------------', fold + 1, 'fold --------------------------')
+        print(f'-------------------------- {fold + 1} fold --------------------------')
 
         train_sampler = SubsetRandomSampler(train_idx)
         val_sampler = SubsetRandomSampler(val_idx)
@@ -354,13 +355,12 @@ def run_training(num_epochs, lr, batch_size, dict_double_conv, dict_ups, device=
         #model = UNET_no_skip_connection(in_channels=3, out_channels=1).to(DEVICE)
         loss_fn = nn.BCEWithLogitsLoss()
         optimizer = optim.Adam(model.parameters(), lr=lr)
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor = 0.05, patience = 20,verbose = True)
 
         # ===== Train Model =====
         for epoch in range(1, num_epochs + 1):
-            train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler, scheduler)
-            check_F1_score(val_loader, model, epoch)
-  
+            train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler )#,scheduler)
+            acc, F1_score = check_F1_score(val_loader, model, epoch)
+
 
 lr = 1e-4
 batch_size = 4
@@ -380,3 +380,7 @@ dict_ups = {"BatchNorm": False,
 
 scaler = torch.cuda.amp.GradScaler()
 run_training(num_epochs, lr, batch_size, dict_double_conv, dict_ups, device=DEVICE)  
+
+
+
+
