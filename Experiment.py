@@ -32,9 +32,10 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 # ## Test on one epoch
 
 # +
-dict_train ={"cross_val": True,
+dict_train ={"save_model": False,
+            "cross_val": True,
             "skip_connection": True,
-            "num_epochs": 5,
+            "num_epochs": 1,
             "n_splits": 2,
             "batch_size": 10,
             "dict_double_conv": {"BatchNorm": True,
@@ -68,25 +69,11 @@ f = open("result_exp/test.pkl","wb")
 pickle.dump(experiment,f)
 f.close()
 
-torch.save(experiment['convergence_path']["Kfold 0"]['last_model'],"model_test.pt" )
-experiment['convergence_path']["Kfold 0"]['last_model']["downs.3.conv.conv1.weight"].shape
-
-# +
-
-checkpoint = torch.load("best-model-unet.pt",map_location=torch.device('cpu'))
-print(len(checkpoint))
-for s in checkpoint:
-    print(s,checkpoint[s].shape)
-# -
-
-print(len(experiment['convergence_path']["Kfold 0"]['last_model']))
-for s in experiment['convergence_path']["Kfold 0"]['last_model']:
-    print(s,experiment['convergence_path']["Kfold 0"]['last_model'][s].shape)
-
 # ## Experiment 1
 
 # +
-dict_train1 ={"cross_val": True,
+dict_train1 ={"save_model": False,
+              "cross_val": True,
             "skip_connection": True,
             "num_epochs": 5,
             "n_splits": 3,
@@ -115,7 +102,7 @@ dict_train1 ={"cross_val": True,
 
 
 experiment1 = {"param": dict_train1}
-#experiment1["convergence_path"] = run_training(dict_train1) 
+experiment1["convergence_path"] = run_training(dict_train1) 
 
 
 f = open("result_exp/experiment1.pkl","wb")
@@ -126,7 +113,8 @@ f.close()
 # ## Experiment 2
 
 # +
-dict_train2 ={"cross_val": True,
+dict_train2 ={"save_model": False,
+            "cross_val": True,
             "skip_connection": False,
             "num_epochs": 5,
             "n_splits": 3,
@@ -162,5 +150,44 @@ f = open("result_exp/experiment2.pkl","wb")
 pickle.dump(experiment2,f)
 f.close()
 # -
+# # Experiment 3
 
 
+# +
+# bias only for double conv
+dict_train3 ={"save_model": False,
+            "cross_val": True,
+            "skip_connection": False,
+            "num_epochs": 5,
+            "n_splits": 3,
+            "batch_size": 10,
+            "dict_double_conv": {"BatchNorm": True,
+                "activation": nn.ReLU(inplace=True),
+                "p_dropout": 0.2,
+                "use_dropout": False,
+                "bias": True},
+            "dict_ups": {"BatchNorm": False,
+                "p_dropout": 0.2,
+                "use_dropout": False,
+                "bias": False},
+            "loss": nn.BCEWithLogitsLoss(),
+            "optimizer": optim.Adam,
+            "param_optimizer": {"weight_decay": None,
+                               "lr": 1e-04},
+            "use_scheduler": True,
+            "type_scheduler": "StepLR",
+            "scheduler": torch.optim.lr_scheduler.StepLR,
+            "param_scheduler": {"step_size": 4,
+                               "gamma": 0.1},
+             "scaler": torch.cuda.amp.GradScaler(),
+             "device": DEVICE
+            }
+
+
+experiment3 = {"param": dict_train3}
+experiment3["convergence_path"] = run_training(dict_train3) 
+
+
+f = open("result_exp/experiment3.pkl","wb")
+pickle.dump(experiment3,f)
+f.close()

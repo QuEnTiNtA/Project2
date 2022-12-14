@@ -32,7 +32,8 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 # ## Test on one epoch
 
 # +
-dict_train ={"cross_val": True,
+dict_train ={"save_model": False,
+            "cross_val": True,
             "skip_connection": True,
             "num_epochs": 1,
             "n_splits": 2,
@@ -64,19 +65,24 @@ experiment = {"param": dict_train}
 experiment["convergence_path"] = run_training(dict_train) 
 # -
 
+f = open("result_exp/test.pkl","wb")
+pickle.dump(experiment,f)
+f.close()
+
 # ## Experiment 1
 
 # +
-dict_train1 ={"cross_val": True,
+dict_train1 ={"save_model": False,
+              "cross_val": True,
             "skip_connection": True,
             "num_epochs": 5,
             "n_splits": 3,
             "batch_size": 10,
             "dict_double_conv": {"BatchNorm": True,
-                "activation": nn.ReLU(inplace=True),
+                "activation": nn.ELU(inplace=True),
                 "p_dropout": 0.2,
                 "use_dropout": False,
-                "bias": False},
+                "bias": True},
             "dict_ups": {"BatchNorm": False,
                 "p_dropout": 0.2,
                 "use_dropout": False,
@@ -84,7 +90,7 @@ dict_train1 ={"cross_val": True,
             "loss": nn.BCEWithLogitsLoss(),
             "optimizer": optim.Adam,
             "param_optimizer": {"weight_decay": None,
-                               "lr": 1e-04},
+                               "lr": 5e-04},
             "use_scheduler": True,
             "type_scheduler": "StepLR",
             "scheduler": torch.optim.lr_scheduler.StepLR,
@@ -107,7 +113,8 @@ f.close()
 # ## Experiment 2
 
 # +
-dict_train2 ={"cross_val": True,
+dict_train2 ={"save_model": False,
+            "cross_val": True,
             "skip_connection": False,
             "num_epochs": 5,
             "n_splits": 3,
@@ -143,5 +150,44 @@ f = open("result_exp/experiment2.pkl","wb")
 pickle.dump(experiment2,f)
 f.close()
 # -
+# # Experiment 3
 
 
+# +
+# bias only for double conv
+dict_train3 ={"save_model": False,
+            "cross_val": True,
+            "skip_connection": False,
+            "num_epochs": 5,
+            "n_splits": 3,
+            "batch_size": 10,
+            "dict_double_conv": {"BatchNorm": True,
+                "activation": nn.ReLU(inplace=True),
+                "p_dropout": 0.2,
+                "use_dropout": False,
+                "bias": True},
+            "dict_ups": {"BatchNorm": False,
+                "p_dropout": 0.2,
+                "use_dropout": False,
+                "bias": False},
+            "loss": nn.BCEWithLogitsLoss(),
+            "optimizer": optim.Adam,
+            "param_optimizer": {"weight_decay": None,
+                               "lr": 1e-04},
+            "use_scheduler": True,
+            "type_scheduler": "StepLR",
+            "scheduler": torch.optim.lr_scheduler.StepLR,
+            "param_scheduler": {"step_size": 4,
+                               "gamma": 0.1},
+             "scaler": torch.cuda.amp.GradScaler(),
+             "device": DEVICE
+            }
+
+
+experiment3 = {"param": dict_train3}
+experiment3["convergence_path"] = run_training(dict_train3) 
+
+
+f = open("result_exp/experiment3.pkl","wb")
+pickle.dump(experiment3,f)
+f.close()
