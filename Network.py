@@ -40,7 +40,7 @@ class DoubleConv(nn.Module):
 
 class UNET(nn.Module):
     def __init__(
-            self, params_DoubleConv, params_up ,in_channels=3, out_channels=1, features=[64, 128, 256, 512],init = False,
+            self, params_DoubleConv, params_up ,in_channels=3, out_channels=1, features=[32,64, 128, 256],init = False,
     ): # outchannels = 1: binary class
         super(UNET, self).__init__()
         self.ups = nn.ModuleList()

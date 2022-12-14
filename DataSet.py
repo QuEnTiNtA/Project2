@@ -23,7 +23,6 @@ class RoadDataset(Dataset):
         img_path = os.path.join(self.image_dir, self.images[index])
         mask_path = os.path.join(self.mask_dir, self.images[index])
         image = np.array(Image.open(img_path).convert("RGB"))
-        
         mask = np.array(Image.open(mask_path).convert("L"), dtype=np.float32)# grayscale
         mask = np.where(mask > 5.0, 1.0, 0.0)
        

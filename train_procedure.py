@@ -58,10 +58,13 @@ def train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler,device = 
         FN += ((preds == 0)*(targets==1)).sum()
         num_pixels += torch.numel(preds)
         num_correct += (preds == targets).sum()
+        recall = TP/(TP+FN)
+        precision = TP/(TP+FP)
+        print(recall,precision)
 
     recall = TP/(TP+FN)
     precision = TP/(TP+FP)
-
+    print(recall,precision)
     print(
         f"Training set: epoch-{epoch} got {num_correct}/{num_pixels} with acc {num_correct/num_pixels*100:.2f}%, F1-score {2*recall*precision/(recall+precision):.2f} and loss {sum(loss_list)/len(loss_list)} ")
 
@@ -143,7 +146,7 @@ def run_training(dict_training):
                 model = UNET(dict_training["dict_double_conv"], dict_training["dict_ups"],in_channels=3, out_channels=1,init=True).to(dict_training["device"])
             else:
                 model = UNET_no_skip_connection(dict_training["dict_double_conv"],in_channels=3, out_channels=1,init=True).to(dict_training["device"])
-
+            
             loss_fn = dict_training["loss"]
 
             if dict_training["param_optimizer"]["weight_decay"] != None:
@@ -154,16 +157,17 @@ def run_training(dict_training):
             if dict_training["use_scheduler"]:
                 if dict_training["type_scheduler"] == "StepLR":
                     scheduler = dict_training["scheduler"](optimizer,step_size=dict_training["param_scheduler"]["step_size"], gamma=dict_training["param_scheduler"]["gamma"])
-
+            
             fold_path = {"train_acc": [],
                         "train_F1": [],
                         "train_loss": [],
                         "val_acc": [],
-                        "val_F1": [],
-                        "last_model": model.state_dict(),
-                        "best_model": model.state_dict() }
+                        "val_F1": []}
+            if dict_training["save_model"]:
+                fold_path["last_model"] = model.state_dict()
+                fold_path["best_model"] = model.state_dict()
             # ===== Train Model =====
-
+            
             for epoch in range(1, dict_training["num_epochs"] + 1):
                 
                 train_acc, train_F1, train_loss  = train_epoch(train_loader, model, optimizer, epoch, loss_fn, dict_training["scaler"],device=dict_training["device"])
@@ -175,13 +179,15 @@ def run_training(dict_training):
                 fold_path["val_acc"].append(val_acc)
                 fold_path["val_F1"].append(val_F1)
                 
-                if val_F1 >= max(fold_path["val_F1"]):
+                if dict_training["save_model"] and epoch>1 and val_F1 >= max(fold_path["val_F1"][:-1]):
                     fold_path["best_model"] = model.state_dict()
-                
+                    
+                    
                 if dict_training["use_scheduler"]:
                     if dict_training["type_scheduler"] == "StepLR":
                         scheduler.step()
-                
+            
+            dict_training["save_model"]:
             fold_path["last_model"] = model.state_dict()
             convergence_path[f"Kfold {fold}"] = fold_path
     else:

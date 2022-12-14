@@ -34,7 +34,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 # +
 dict_train ={"cross_val": True,
             "skip_connection": True,
-            "num_epochs": 1,
+            "num_epochs": 5,
             "n_splits": 2,
             "batch_size": 10,
             "dict_double_conv": {"BatchNorm": True,
@@ -64,6 +64,25 @@ experiment = {"param": dict_train}
 experiment["convergence_path"] = run_training(dict_train) 
 # -
 
+f = open("result_exp/test.pkl","wb")
+pickle.dump(experiment,f)
+f.close()
+
+torch.save(experiment['convergence_path']["Kfold 0"]['last_model'],"model_test.pt" )
+experiment['convergence_path']["Kfold 0"]['last_model']["downs.3.conv.conv1.weight"].shape
+
+# +
+
+checkpoint = torch.load("best-model-unet.pt",map_location=torch.device('cpu'))
+print(len(checkpoint))
+for s in checkpoint:
+    print(s,checkpoint[s].shape)
+# -
+
+print(len(experiment['convergence_path']["Kfold 0"]['last_model']))
+for s in experiment['convergence_path']["Kfold 0"]['last_model']:
+    print(s,experiment['convergence_path']["Kfold 0"]['last_model'][s].shape)
+
 # ## Experiment 1
 
 # +
@@ -73,10 +92,10 @@ dict_train1 ={"cross_val": True,
             "n_splits": 3,
             "batch_size": 10,
             "dict_double_conv": {"BatchNorm": True,
-                "activation": nn.ReLU(inplace=True),
+                "activation": nn.ELU(inplace=True),
                 "p_dropout": 0.2,
                 "use_dropout": False,
-                "bias": False},
+                "bias": True},
             "dict_ups": {"BatchNorm": False,
                 "p_dropout": 0.2,
                 "use_dropout": False,
@@ -84,7 +103,7 @@ dict_train1 ={"cross_val": True,
             "loss": nn.BCEWithLogitsLoss(),
             "optimizer": optim.Adam,
             "param_optimizer": {"weight_decay": None,
-                               "lr": 1e-04},
+                               "lr": 5e-04},
             "use_scheduler": True,
             "type_scheduler": "StepLR",
             "scheduler": torch.optim.lr_scheduler.StepLR,
@@ -96,7 +115,7 @@ dict_train1 ={"cross_val": True,
 
 
 experiment1 = {"param": dict_train1}
-experiment1["convergence_path"] = run_training(dict_train1) 
+#experiment1["convergence_path"] = run_training(dict_train1) 
 
 
 f = open("result_exp/experiment1.pkl","wb")
