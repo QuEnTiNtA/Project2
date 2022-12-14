@@ -143,9 +143,11 @@ def run_training(dict_training):
             # ===== Model, Optimizer and Loss function =====   
 
             if dict_training["skip_connection"]:
-                model = UNET(dict_training["dict_double_conv"], dict_training["dict_ups"],in_channels=3, out_channels=1,init=True).to(dict_training["device"])
+                model = UNET(dict_training["dict_double_conv"], dict_training["dict_ups"],in_channels=3, out_channels=1,init=True,
+                             scale_channel=dict_training["scale_channel"]).to(dict_training["device"])
             else:
-                model = UNET_no_skip_connection(dict_training["dict_double_conv"],in_channels=3, out_channels=1,init=True).to(dict_training["device"])
+                model = UNET_no_skip_connection(dict_training["dict_double_conv"],in_channels=3, out_channels=1,
+                                                init=True,scale_channel=dict_training["scale_channel"]).to(dict_training["device"])
             
             loss_fn = dict_training["loss"]
 
@@ -199,9 +201,9 @@ def run_training(dict_training):
             # ===== Model, Optimizer and Loss function =====   
 
         if dict_training["skip_connection"]:
-                model = UNET(dict_training["dict_double_conv"], dict_training["dict_ups"],in_channels=3, out_channels=1,init=True).to(dict_training["device"])
+            model = UNET(dict_training["dict_double_conv"], dict_training["dict_ups"],in_channels=3, out_channels=1,init=True,scale_channel=dict_training["scale_channel"]).to(dict_training["device"])
         else:
-            model = UNET_no_skip_connection(dict_training["dict_double_conv"],in_channels=3, out_channels=1,init=True).to(dict_training["device"])
+            model = UNET_no_skip_connection(dict_training["dict_double_conv"],in_channels=3, out_channels=1,init=True,scale_channel=dict_training["scale_channel"]).to(dict_training["device"])
 
         loss_fn = dict_training["loss"]
 

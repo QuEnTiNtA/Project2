@@ -40,8 +40,9 @@ class DoubleConv(nn.Module):
 
 class UNET(nn.Module):
     def __init__(
-            self, params_DoubleConv, params_up ,in_channels=3, out_channels=1, features=[32,64, 128, 256],init = False,
+            self, params_DoubleConv, params_up ,in_channels=3, out_channels=1, features=[32,64, 128, 256],init = False,scale_channel=1
     ): # outchannels = 1: binary class
+        features = [int(scale_channel*feature) for feature in features]
         super(UNET, self).__init__()
         self.ups = nn.ModuleList()
         self.downs = nn.ModuleList()
@@ -107,8 +108,9 @@ class UNET(nn.Module):
 
 class UNET_no_skip_connection(nn.Module):
     def __init__(
-            self,params_DoubleConv, in_channels=3, out_channels=1, features=[64, 128, 256, 512],init=False
+            self,params_DoubleConv, in_channels=3, out_channels=1, features=[32, 64, 128, 256],init=False,scale_channel=1,
     ): # outchannels = 1: binary class
+        features = [int(scale_channel*feature) for feature in features]
         super(UNET_no_skip_connection, self).__init__()
         self.ups = nn.ModuleList()
         self.downs = nn.ModuleList()
