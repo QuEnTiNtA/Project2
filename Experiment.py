@@ -75,8 +75,8 @@ f.close()
 dict_train1 ={"save_model": False,
               "cross_val": True,
             "skip_connection": True,
-            "num_epochs": 5,
-            "n_splits": 3,
+            "num_epochs": 10,
+            "n_splits": 2,
             "batch_size": 10,
             "dict_double_conv": {"BatchNorm": True,
                 "activation": nn.ELU(inplace=True),
@@ -116,8 +116,8 @@ f.close()
 dict_train2 ={"save_model": False,
             "cross_val": True,
             "skip_connection": False,
-            "num_epochs": 5,
-            "n_splits": 3,
+            "num_epochs": 10,
+            "n_splits": 2,
             "batch_size": 10,
             "dict_double_conv": {"BatchNorm": True,
                 "activation": nn.ReLU(inplace=True),
@@ -158,8 +158,8 @@ f.close()
 dict_train3 ={"save_model": False,
             "cross_val": True,
             "skip_connection": False,
-            "num_epochs": 5,
-            "n_splits": 3,
+            "num_epochs": 10,
+            "n_splits": 2,
             "batch_size": 10,
             "dict_double_conv": {"BatchNorm": True,
                 "activation": nn.ReLU(inplace=True),
@@ -190,4 +190,88 @@ experiment3["convergence_path"] = run_training(dict_train3)
 
 f = open("result_exp/experiment3.pkl","wb")
 pickle.dump(experiment3,f)
+f.close()
+# -
+
+# ## Experiement 4
+
+# +
+# bias only for transpose_conv
+dict_train4 ={"save_model": False,
+            "cross_val": True,
+            "skip_connection": False,
+            "num_epochs": 10,
+            "n_splits": 2,
+            "batch_size": 10,
+            "dict_double_conv": {"BatchNorm": True,
+                "activation": nn.ReLU(inplace=True),
+                "p_dropout": 0.2,
+                "use_dropout": False,
+                "bias": False},
+            "dict_ups": {"BatchNorm": False,
+                "p_dropout": 0.2,
+                "use_dropout": False,
+                "bias": True},
+            "loss": nn.BCEWithLogitsLoss(),
+            "optimizer": optim.Adam,
+            "param_optimizer": {"weight_decay": None,
+                               "lr": 1e-04},
+            "use_scheduler": True,
+            "type_scheduler": "StepLR",
+            "scheduler": torch.optim.lr_scheduler.StepLR,
+            "param_scheduler": {"step_size": 4,
+                               "gamma": 0.1},
+             "scaler": torch.cuda.amp.GradScaler(),
+             "device": DEVICE
+            }
+
+
+experiment4 = {"param": dict_train4}
+experiment4["convergence_path"] = run_training(dict_train4) 
+
+
+f = open("result_exp/experiment4.pkl","wb")
+pickle.dump(experiment4,f)
+f.close()
+# -
+
+# ## Experiement 5
+
+# +
+# bias for double conv and trans_conv
+dict_train4 ={"save_model": False,
+            "cross_val": True,
+            "skip_connection": False,
+            "num_epochs": 10,
+            "n_splits": 2,
+            "batch_size": 10,
+            "dict_double_conv": {"BatchNorm": True,
+                "activation": nn.ReLU(inplace=True),
+                "p_dropout": 0.2,
+                "use_dropout": False,
+                "bias": True},
+            "dict_ups": {"BatchNorm": False,
+                "p_dropout": 0.2,
+                "use_dropout": False,
+                "bias": True},
+            "loss": nn.BCEWithLogitsLoss(),
+            "optimizer": optim.Adam,
+            "param_optimizer": {"weight_decay": None,
+                               "lr": 1e-04},
+            "use_scheduler": True,
+            "type_scheduler": "StepLR",
+            "scheduler": torch.optim.lr_scheduler.StepLR,
+            "param_scheduler": {"step_size": 4,
+                               "gamma": 0.1},
+             "scaler": torch.cuda.amp.GradScaler(),
+             "device": DEVICE
+            }
+
+
+experiment4 = {"param": dict_train4}
+experiment4["convergence_path"] = run_training(dict_train4) 
+
+
+f = open("result_exp/experiment4.pkl","wb")
+pickle.dump(experiment4,f)
 f.close()

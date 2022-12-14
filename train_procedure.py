@@ -76,12 +76,14 @@ def check_F1_score(val_loader, model, epoch,device='cpu'):
     num_correct = 0
     num_pixels = 0
     model.eval()
-
+    loss_ = []
     with torch.no_grad():
         for x, y in val_loader:
             x = x.to(device=device)
             y = y.to(device=device) # the grayscale does not have channels, add
-            preds = torch.sigmoid(model(x))
+            output = model(x)
+            loss_.append(loss_fn(output, y))
+            preds = torch.sigmoid(output)
             preds = (preds > 0.5).float()
             
             TP += ((preds == 1)*(y==1)).sum()
@@ -93,11 +95,11 @@ def check_F1_score(val_loader, model, epoch,device='cpu'):
     precision = TP/(TP+FP)
     
     print(
-        f"Validation set: epoch-{epoch} got {num_correct}/{num_pixels} with acc {num_correct/num_pixels*100:.2f}% and F1-score {2*recall*precision/(recall+precision):.2f}"
+        f"Validation set: epoch-{epoch} got {num_correct}/{num_pixels} with acc {num_correct/num_pixels*100:.2f}% , F1-score {2*recall*precision/(recall+precision):.2f} and validation loss {sum(loss_)/len(loss_)}"
     )
     model.train()
 
-    return num_correct/num_pixels, 2*recall*precision/(recall+precision)
+    return num_correct/num_pixels, 2*recall*precision/(recall+precision), loss_
 
 
 
@@ -160,7 +162,8 @@ def run_training(dict_training):
                         "train_F1": [],
                         "train_loss": [],
                         "val_acc": [],
-                        "val_F1": []}
+                        "val_F1": [],
+                        "val_loss": []}
             if dict_training["save_model"]:
                 fold_path["last_model"] = model.state_dict()
                 fold_path["best_model"] = model.state_dict()
@@ -169,13 +172,14 @@ def run_training(dict_training):
             for epoch in range(1, dict_training["num_epochs"] + 1):
                 
                 train_acc, train_F1, train_loss  = train_epoch(train_loader, model, optimizer, epoch, loss_fn, dict_training["scaler"],device=dict_training["device"])
-                val_acc, val_F1 = check_F1_score(val_loader, model, epoch,device=dict_training["device"])
+                val_acc, val_F1, val_loss = check_F1_score(val_loader, model, epoch,device=dict_training["device"])
                 
                 fold_path["train_acc"].append(train_acc)
                 fold_path["train_F1"].append(train_F1)
                 fold_path["train_loss"].append(train_loss)
                 fold_path["val_acc"].append(val_acc)
                 fold_path["val_F1"].append(val_F1)
+                fold_path["val_loss"].append(val_loss)
                 
                 if dict_training["save_model"] and epoch>1 and val_F1 >= max(fold_path["val_F1"][:-1]):
                     fold_path["best_model"] = model.state_dict()
