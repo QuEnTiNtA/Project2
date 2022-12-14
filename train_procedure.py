@@ -69,7 +69,7 @@ def train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler,device = 
     return num_correct/num_pixels, 2*recall*precision/(recall+precision), loss_list
 
 
-def check_F1_score(val_loader, model, epoch,device='cpu'):
+def check_F1_score(val_loader, model, epoch, loss_fn,device='cpu'):
     TP = 0
     FP = 0
     FN = 0
@@ -174,7 +174,7 @@ def run_training(dict_training):
             for epoch in range(1, dict_training["num_epochs"] + 1):
                 
                 train_acc, train_F1, train_loss  = train_epoch(train_loader, model, optimizer, epoch, loss_fn, dict_training["scaler"],device=dict_training["device"])
-                val_acc, val_F1, val_loss = check_F1_score(val_loader, model, epoch,device=dict_training["device"])
+                val_acc, val_F1, val_loss = check_F1_score(val_loader, model, epoch, loss_fn,device=dict_training["device"])
                 
                 fold_path["train_acc"].append(train_acc)
                 fold_path["train_F1"].append(train_F1)
