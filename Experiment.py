@@ -34,6 +34,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 # +
 dict_train ={"save_model": False,
             "cross_val": True,
+             "scale_channel":1,
             "skip_connection": True,
             "num_epochs": 1,
             "n_splits": 2,
@@ -235,11 +236,11 @@ pickle.dump(experiment4,f)
 f.close()
 # -
 
-# ## Experiement 5
+# ## Experiment 5
 
 # +
 # bias for double conv and trans_conv
-dict_train4 ={"save_model": False,
+dict_train5 ={"save_model": False,
             "cross_val": True,
             "skip_connection": False,
             "num_epochs": 10,
@@ -268,10 +269,37 @@ dict_train4 ={"save_model": False,
             }
 
 
-experiment4 = {"param": dict_train4}
-experiment4["convergence_path"] = run_training(dict_train4) 
+experiment5 = {"param": dict_train5}
+experiment5["convergence_path"] = run_training(dict_train5) 
 
 
-f = open("result_exp/experiment4.pkl","wb")
-pickle.dump(experiment4,f)
+f = open("result_exp/experiment5.pkl","wb")
+pickle.dump(experiment5,f)
 f.close()
+
+# +
+import io
+
+class CPU_Unpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        if module == 'torch.storage' and name == '_load_from_bytes':
+            return lambda b: torch.load(io.BytesIO(b), map_location='cpu')
+        else:
+            return super().find_class(module, name)
+
+exp = {}
+
+for i in range(1,5):
+    f = open(f"result_exp/experiment{i}.pkl","rb")
+    exp[f"exp{i}"] = CPU_Unpickler(f).load()
+    f.close()
+# -
+for key,i in exp["exp1"]["convergence_path"]["Kfold 0"].items():
+    print(key)
+exp["exp4"]["convergence_path"]["Kfold 0"]["val_F1"]
+
+fig = plt.figure(figsize=(10,6))
+for i in range(len(exp)):
+    y = 0.5*(exp[f"exp{i}"]["convergence_path"]["Kfold 0"]["val_F1"] + exp[f"exp{i}"]["convergence_path"]["Kfold 1"]["val_F1"])
+    plt.plot(np.arrange(1,len(y)+1),y,label=f"exp{i}")
+
