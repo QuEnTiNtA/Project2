@@ -293,13 +293,33 @@ for i in range(1,5):
     f = open(f"result_exp/experiment{i}.pkl","rb")
     exp[f"exp{i}"] = CPU_Unpickler(f).load()
     f.close()
+    
+exp_bis = {}
+
+for i in range(1,5):
+    f = open(f"result_exp/experiment{i}bis.pkl","rb")
+    exp_bis[f"exp{i}"] = CPU_Unpickler(f).load()
+    f.close()
 # -
 for key,i in exp["exp1"]["convergence_path"]["Kfold 0"].items():
     print(key)
-exp["exp4"]["convergence_path"]["Kfold 0"]["val_F1"]
+exp["exp2"]["convergence_path"]["Kfold 0"]["val_F1"]
 
 fig = plt.figure(figsize=(10,6))
-for i in range(len(exp)):
-    y = 0.5*(exp[f"exp{i}"]["convergence_path"]["Kfold 0"]["val_F1"] + exp[f"exp{i}"]["convergence_path"]["Kfold 1"]["val_F1"])
-    plt.plot(np.arrange(1,len(y)+1),y,label=f"exp{i}")
+label = ["skip_connect","no_skip_connect","skip_connect + conv_bias", "skip_connect + trans_conv_bias"]
+for i in range(1,1+len(exp)):
+    y = 0.5*(np.array(exp[f"exp{i}"]["convergence_path"]["Kfold 0"]["val_F1"]) + np.array(exp[f"exp{i}"]["convergence_path"]["Kfold 1"]["val_F1"]))
+    plt.plot(np.arange(1,len(y)+1),y,label=label[i-1])
+plt.legend()
+plt.show()
+
+
+fig = plt.figure(figsize=(10,6))
+label = [f"exp{i}" for i in range(4)]
+for i in range(1,1+len(exp)):
+    y = 0.5*(np.array(exp_bis[f"exp{i}"]["convergence_path"]["Kfold 0"]["val_F1"]) + np.array(exp_bis[f"exp{i}"]["convergence_path"]["Kfold 1"]["val_F1"]))
+    plt.plot(np.arange(1,len(y)+1),y,label=label[i-1])
+plt.legend()
+plt.show()
+
 
