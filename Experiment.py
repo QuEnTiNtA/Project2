@@ -294,24 +294,57 @@ for i in range(1,5):
     exp[f"exp{i}"] = CPU_Unpickler(f).load()
     f.close()
     
-exp_bis = {}
+
+
+
+f = open(f"result_exp/experiment2bis.pkl","rb")
+exp_4_ = CPU_Unpickler(f).load()
+f.close()
+    
+exp_ = {}
+
+# +
+import io
+
+class CPU_Unpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        if module == 'torch.storage' and name == '_load_from_bytes':
+            return lambda b: torch.load(io.BytesIO(b), map_location='cpu')
+        else:
+            return super().find_class(module, name)
+
+exp = {}
 
 for i in range(1,5):
-    f = open(f"result_exp/experiment{i}bis.pkl","rb")
-    exp_bis[f"exp{i}"] = CPU_Unpickler(f).load()
+    f = open(f"result_exp/experiment{i}.pkl","rb")
+    exp[f"exp{i}"] = CPU_Unpickler(f).load()
     f.close()
-# -
-for key,i in exp["exp1"]["convergence_path"]["Kfold 0"].items():
-    print(key)
-exp["exp2"]["convergence_path"]["Kfold 0"]["val_F1"]
 
-fig = plt.figure(figsize=(10,6))
+f = open(f"result_exp/experiment2bis.pkl","rb")
+exp_4_ = CPU_Unpickler(f).load()
+f.close()
+
+
+fig, (ax1,ax2) = plt.subplots(2,1,figsize=(6,8))
 label = ["skip_connect","no_skip_connect","skip_connect + conv_bias", "skip_connect + trans_conv_bias"]
 for i in range(1,1+len(exp)):
     y = 0.5*(np.array(exp[f"exp{i}"]["convergence_path"]["Kfold 0"]["val_F1"]) + np.array(exp[f"exp{i}"]["convergence_path"]["Kfold 1"]["val_F1"]))
-    plt.plot(np.arange(1,len(y)+1),y,label=label[i-1])
-plt.legend()
+    ax1.plot(np.arange(1,len(y)+1),y,label=label[i-1])
+    y = 0.5*(np.array(exp[f"exp{i}"]["convergence_path"]["Kfold 0"]["val_acc"]) + np.array(exp[f"exp{i}"]["convergence_path"]["Kfold 1"]["val_acc"]))
+    ax2.plot(np.arange(1,len(y)+1),y,'-',label=label[i-1])
+
+y = 0.5*(np.array(exp_4_["convergence_path"]["Kfold 0"]["val_F1"]) + np.array(exp_4_["convergence_path"]["Kfold 1"]["val_F1"]))
+ax1.plot(np.arange(1,len(y)+1),y,label="skip_connect + ELU activation")
+y = 0.5*(np.array(exp_4_["convergence_path"]["Kfold 0"]["val_acc"]) + np.array(exp_4_["convergence_path"]["Kfold 1"]["val_acc"]))
+ax2.plot(np.arange(1,len(y)+1),y,'-',label="skip_connect + ELU activation")
+ax2.legend()
+ax1.legend()
+ax1.set_title('Validation F1 score')
+ax2.set_title('Validation Accuracy')
+fig.supxlabel('epoch',y=0.05)
+plt.savefig('Figure/val_acc_1.pdf', dpi=300, bbox_inches='tight')
 plt.show()
+# -
 
 
 fig = plt.figure(figsize=(10,6))
@@ -322,4 +355,15 @@ for i in range(1,1+len(exp)):
 plt.legend()
 plt.show()
 
+fig = plt.figure(figsize=(10,6))
+label = [f"exp{i}" for i in range(5,11)]
+for i in range(5,11):
+    y = 0.5*(np.array(exp_[f"exp{i}"]["convergence_path"]["Kfold 0"]["val_F1"]) + np.array(exp_[f"exp{i}"]["convergence_path"]["Kfold 1"]["val_F1"]))
+    plt.plot(np.arange(1,len(y)+1),y,label=label[i-5])
+plt.legend()
+plt.show()
 
+for i in range(5,11):
+    print(exp_[f"exp{i}"]["param"],"\n\n\n")
+
+exp_[f"exp{5}"]

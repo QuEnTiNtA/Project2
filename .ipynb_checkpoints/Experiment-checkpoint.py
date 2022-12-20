@@ -300,6 +300,13 @@ for i in range(1,5):
     f = open(f"result_exp/experiment{i}bis.pkl","rb")
     exp_bis[f"exp{i}"] = CPU_Unpickler(f).load()
     f.close()
+    
+exp_ = {}
+
+for i in range(5,11):
+    f = open(f"result_exp/experiment{i}.pkl","rb")
+    exp_[f"exp{i}"] = CPU_Unpickler(f).load()
+    f.close()
 # -
 for key,i in exp["exp1"]["convergence_path"]["Kfold 0"].items():
     print(key)

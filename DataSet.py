@@ -25,7 +25,6 @@ class RoadDataset(Dataset):
         image = np.array(Image.open(img_path).convert("RGB"))
         mask = np.array(Image.open(mask_path).convert("L"), dtype=np.float32)# grayscale
         mask = np.where(mask > 5.0, 1.0, 0.0)
-        print(mask.shape)
        
 
         if self.transform is not None:

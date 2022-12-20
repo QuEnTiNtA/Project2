@@ -159,7 +159,7 @@ def run_training(dict_training):
             if dict_training["use_scheduler"]:
                 if dict_training["type_scheduler"] == "StepLR":
                     scheduler = dict_training["scheduler"](optimizer,step_size=dict_training["param_scheduler"]["step_size"], gamma=dict_training["param_scheduler"]["gamma"])
-            
+                
             fold_path = {"train_acc": [],
                         "train_F1": [],
                         "train_loss": [],
@@ -215,18 +215,23 @@ def run_training(dict_training):
         if dict_training["use_scheduler"]:
             if dict_training["type_scheduler"] == "StepLR":
                 scheduler = dict_training["scheduler"](optimizer,step_size=dict_training["param_scheduler"]["step_size"], gamma=dict_training["param_scheduler"]["gamma"])
-
+            elif dict_training["type_scheduler"] == "ReduceLROnPlateau":
+                scheduler = dict_training["scheduler"](optimizer,mode=dict_training["param_scheduler"]["mode"],
+                                                       factor=dict_training["param_scheduler"]["factor"],min_lr=dict_training["param_scheduler"]["min_lr"],
+                                                      patience=dict_training["param_scheduler"]["patience"],verbose = dict_training["param_scheduler"]["verbose"])
+            
         convergence_path = {"train_acc": [],
                         "train_F1": [],
                         "train_loss": [],
                         "val_acc": [],
-                        "val_F1": [],
-                        "last_model": model.state_dict(),
-                        "best_model": model.state_dict() }
+                        "val_F1": []
+                        }
+        
+        best_model = model.state_dict() 
         
             # ===== Train Model =====
 
-        for epoch in range(1, dict_training["nums_epochs"] + 1):
+        for epoch in range(1, dict_training["num_epochs"] + 1):
             
             train_acc, train_F1, train_loss  = train_epoch(train_loader, model, optimizer, epoch, loss_fn, dict_training["scaler"], device=dict_training["device"])
             
@@ -234,13 +239,16 @@ def run_training(dict_training):
             convergence_path["train_F1"].append(train_F1)
             convergence_path["train_loss"].append(train_loss)
                 
-            if val_F1 >= max(fols_path["val_F1"]):
-                convergence_path["best_model"] = model.state_dict()
+            if train_F1 >= max(convergence_path["train_F1"]):
+                best_model = model.state_dict()
                 
             if dict_training["use_scheduler"]:
                 if dict_training["type_scheduler"] == "StepLR":
                     scheduler.step()
-                
-        convergence_path["last_model"] = model.state_dict()
+                elif dict_training["type_scheduler"] == "ReduceLROnPlateau":
+                    scheduler.step(train_F1)
+                    
+        torch.save(best_model, f'trained_model/best_model{dict_training["num_model"]}.pth')
+        torch.save(model.state_dict(), f'trained_model/last_model{dict_training["num_model"]}.pth')
             
     return convergence_path
