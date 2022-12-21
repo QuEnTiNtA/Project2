@@ -9,6 +9,11 @@ import torchvision.transforms.functional as TF
 import torchvision
 from tqdm import tqdm
 
+
+"""
+Performs the training of an epoch on a model
+Returns the results
+"""
 def train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler, scheduler):
     loop = tqdm(train_loader)
 
@@ -57,6 +62,10 @@ def train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler, schedule
     return num_correct/num_pixels, 2*recall*precision/(recall+precision)
 
 
+"""
+Calculate the f1 score given a prediction
+Returns the f1 score
+"""
 def check_F1_score(val_loader, model, epoch):
     TP = 0
     FP = 0
@@ -87,6 +96,10 @@ def check_F1_score(val_loader, model, epoch):
 
     return num_correct/num_pixels, 2*recall*precision/(recall+precision)
 
+
+"""
+Saves the predictions as mask images
+"""
 def save_predictions_as_imgs(
     test_loader, model, folder="saved_images", device="cuda"
 ):

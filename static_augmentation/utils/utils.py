@@ -5,10 +5,17 @@ import numpy as np
 from PIL import Image
 from train import *
 
+"""
+Save a simulation state into a checkpoint
+"""
 def save_checkpoint(state, filename="my_checkpoint.pth.tar"):
     print("=> Saving checkpoint")
     torch.save(state, filename)
 
+
+"""
+Load a simulation checkpoint
+"""
 def load_checkpoint(checkpoint, model):
     print("=> Loading checkpoint")
     model.load_state_dict(checkpoint["state_dict"])
@@ -38,6 +45,10 @@ class RoadDataset(Dataset):
 
         return image, mask
 
+"""
+Returns the set of transformations that will be performed on the dataset
+depending on the parameters given
+"""
 def get_transform(
     image_height,
     image_width,
@@ -77,6 +88,10 @@ path_list = os.listdir(test_dir)
 path_list.sort(key=lambda x: int(x.split(".")[0].split("_")[1]))
 path_list
 
+
+"""
+Defines the test set of the dataset
+"""
 class RoadData_test_set(Dataset):
 
     def __init__(self, image_dir, transform=None):
@@ -97,6 +112,10 @@ class RoadData_test_set(Dataset):
 
         return image
 
+
+"""
+Returns the loader for the dataset
+"""
 def get_test_loader(num_workers, pin_memory):
 
     image_height = 600  #  400 pixels originally

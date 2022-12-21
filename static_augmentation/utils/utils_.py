@@ -7,10 +7,17 @@ from patchify import patchify
 from train import *
 import albumentations as A
 
+"""
+Save a simulation state into a checkpoint
+"""
 def save_checkpoint(state, filename="my_checkpoint.pth"):
     print("=> Saving checkpoint")
     torch.save(state, filename)
 
+
+"""
+Load a simulation checkpoint
+"""
 def load_checkpoint(checkpoint, model):
     print("=> Loading checkpoint")
     model.load_state_dict(checkpoint["state_dict"])
@@ -47,6 +54,11 @@ class RoadDataset(Dataset):
         else:
             return image, mask
 
+
+"""
+Returns the set of transformations that will be performed on the dataset
+depending if it is for the training or not
+"""
 def get_transform(train):
     if train:
         transform_0 = A.Compose(
@@ -98,6 +110,9 @@ def get_transform(train):
     return transform
 
 
+"""
+Defines the test set of the dataset
+"""
 class RoadData_test_set(Dataset):
 
     def __init__(self, image_dir, transform=None, test_dir='../data/test_images/'):
@@ -129,6 +144,10 @@ class RoadData_test_set(Dataset):
         # return torch.Tensor(patches).reshape(81, 3, 304, 304)  # (608 - 304) / 38 + 1 = 9
         # return torch.Tensor(patches).reshape(16, 3, 152, 152)
 
+
+"""
+Returns the loader for the dataset
+"""
 def get_test_loader(batch_size, num_workers, pin_memory, test_dir='../data/test_images/'):
 
     image_height = 608  #  400 pixels originally

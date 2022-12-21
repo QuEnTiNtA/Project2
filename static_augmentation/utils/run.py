@@ -18,6 +18,10 @@ load_model = False
 # load_model = True
 k=5
 
+
+"""
+Run the training on a neural network defined by its parameters
+"""
 def run_training(num_epochs, lr, batch_size, dict_double_conv, dict_ups, device=DEVICE):
     # ===== Data Loading =====
     # The input images should be normalized to have zero mean, unit variance

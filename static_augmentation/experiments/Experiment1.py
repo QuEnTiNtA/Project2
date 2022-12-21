@@ -1,4 +1,8 @@
 # +
+import sys
+
+sys.path.insert(0, '../utils')
+
 import os
 from PIL import Image
 from torch.utils.data import Dataset, DataLoader

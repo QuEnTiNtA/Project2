@@ -18,6 +18,11 @@ from Network import *
 from DataSet import *
 from torchvision import transforms
 
+
+"""
+Performs the training of an epoch on a model
+Returns the results
+"""
 def train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler,device = 'cpu', scheduler=None):
     loop = tqdm(train_loader)
 
@@ -69,6 +74,10 @@ def train_epoch(train_loader, model, optimizer, epoch, loss_fn, scaler,device = 
     return num_correct/num_pixels, 2*recall*precision/(recall+precision), loss_list
 
 
+"""
+Calculate the f1 score given a prediction
+Returns the f1 score, precision and list of losses
+"""
 def check_F1_score(val_loader, model, epoch, loss_fn,device='cpu'):
     TP = 0
     FP = 0
@@ -103,7 +112,15 @@ def check_F1_score(val_loader, model, epoch, loss_fn,device='cpu'):
 
 
 
-
+"""
+Runs the training of a model given the dictionnary that defines the model
+Returns the result for each epoch of the model ({"train_acc": [],
+                                                "train_F1": [],
+                                                "train_loss": [],
+                                                "val_acc": [],
+                                                "val_F1": []
+                                                })
+"""
 def run_training(dict_training):
     
     convergence_path = {}

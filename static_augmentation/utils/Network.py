@@ -4,7 +4,9 @@ import torch.nn.functional as F
 import torchvision.transforms.functional as TF
 from collections import OrderedDict
 
-
+"""
+Definition of the double convolution
+"""
 class DoubleConv(nn.Module):
     def __init__(self, in_channels, out_channels, params_DoubleConv, init = False):
         super(DoubleConv, self).__init__()
@@ -38,6 +40,10 @@ class DoubleConv(nn.Module):
     def forward(self, x):
         return self.conv(x)
 
+
+"""
+Definition of the U net architecture depending on the parameters given 
+"""
 class UNET(nn.Module):
     def __init__(
             self, params_DoubleConv, params_up ,in_channels=3, out_channels=1, features=[32,64, 128, 256],init = False,scale_channel=1
@@ -106,6 +112,10 @@ class UNET(nn.Module):
 
         return self.final_conv(x)
 
+
+"""
+Definition of the U net architecture depending on the parameters given without any skip connections
+"""
 class UNET_no_skip_connection(nn.Module):
     def __init__(
             self,params_DoubleConv, in_channels=3, out_channels=1, features=[32, 64, 128, 256],init=False,scale_channel=1,

@@ -8,7 +8,9 @@ import torch.nn as nn
 import torchvision.transforms.functional as TF
 
 
-
+"""
+Definition of the dataset
+"""
 class RoadDataset(Dataset):
     def __init__(self, image_dir, mask_dir, transform=None):
         self.image_dir = image_dir
