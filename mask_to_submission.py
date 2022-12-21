@@ -47,7 +47,7 @@ def masks_to_submission(submission_filename, *image_filenames):
 #     masks_to_submission(submission_filename, *image_filenames)
 
 if __name__ == '__main__':
-    submission_filename = 'dummy_submission1.csv'
+    submission_filename = 'dummy_submission3.csv'
     image_filenames = []
     for i in tqdm(range(1, 51)):
         image_filename = 'predict_mask/pred_' + '%.1d' % i + '.png'
