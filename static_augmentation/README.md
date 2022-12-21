@@ -1,5 +1,4 @@
-# Project2
-Kieran Vaudaux, Mathieu Marchand, Wanting Li
+# Static augmentation
 
 ## Data augmentation
 For the data augmentation, we implemented a transformer for the data with a combination of the following transformations :
@@ -8,8 +7,10 @@ For the data augmentation, we implemented a transformer for the data with a comb
 - Rotation : Apply a rotation to the image from [-angle;+angle]
 - Normalization : normalization to mean = 0, std = 1 and with max pixel value of 237 (maximum value of a pixel in the dataset)
 
-## Neural network
+## Testing different configurations
 The experimented neural network was a UNet. Different tests were made to determine the hyper parameters of the UNet such as the activation function, the use of bias, skipping some connections, or the activation function (not exhaustive).
+
+You can find the experiment scripts in the <a href="experiments/">experiment folder</a>
 
 Below, you will find all the configurations tested :
 
