@@ -18,8 +18,117 @@ Below, you will find all the configurations tested :
 - Number of epochs : 10
 - number of splits : 2
 - batch size : 10
-- activation function : ELU with bias
+- double convolution : ELU with bias
+- up convolution : without dropout 
 - loss function : BCEWithLogitsLoss
 - Optimizer : Adam
+- Scheduler : torch.optim.lr_scheduler.StepLR
+- Scaler :  torch.cuda.amp.GradScaler
+
+### Experiment 2
+- Skip connection : False
+- Number of epochs : 10
+- number of splits : 2
+- batch size : 10
+- double convolution : RELU without bias
+- up convolution : without dropout 
+- loss function : BCEWithLogitsLoss
+- Optimizer : Adam
+- Scheduler : torch.optim.lr_scheduler.StepLR
+- Scaler :  torch.cuda.amp.GradScaler
+
+### Experiment 3
+- Skip connection : False
+- Number of epochs : 10
+- number of splits : 2
+- batch size : 10
+- double convolution : RELU with bias
+- up convolution : without dropout 
+- loss function : BCEWithLogitsLoss
+- Optimizer : Adam
+- Scheduler : torch.optim.lr_scheduler.StepLR
+- Scaler :  torch.cuda.amp.GradScaler
+
+### Experiment 4
+- Skip connection : False
+- Number of epochs : 10
+- number of splits : 2
+- batch size : 10
+- double convolution : RELU without bias
+- up convolution : without dropout with bias
+- loss function : BCEWithLogitsLoss
+- Optimizer : Adam
+- Scheduler : torch.optim.lr_scheduler.StepLR
+- Scaler :  torch.cuda.amp.GradScaler
+
+### Experiment 5
+- Skip connection : True
+- Number of epochs : 10
+- number of splits : 2
+- batch size : 10
+- double convolution : ELU without bias with dropout 0.2
+- up convolution : without dropout with bias
+- loss function : BCEWithLogitsLoss
+- Optimizer : Adam
+- Scheduler : torch.optim.lr_scheduler.StepLR
+- Scaler :  torch.cuda.amp.GradScaler
+
+### Experiment 6
+- Skip connection : True
+- Number of epochs : 10
+- number of splits : 2
+- batch size : 10
+- double convolution : ELU without bias with dropout 0.5
+- up convolution : without dropout 
+- loss function : BCEWithLogitsLoss
+- Optimizer : Adam
+- Scheduler : torch.optim.lr_scheduler.StepLR
+- Scaler :  torch.cuda.amp.GradScaler
+
+### Experiment 7
+- Skip connection : True
+- Number of epochs : 10
+- number of splits : 1
+- batch size : 10
+- double convolution : ELU with bias with dropout TODO
+- up convolution : without dropout 
+- loss function : BCEWithLogitsLoss
+- Optimizer : Adam
+- Scheduler : torch.optim.lr_scheduler.StepLR
+- Scaler :  torch.cuda.amp.GradScaler
+
+### Experiment 8
+- Skip connection : True
+- Number of epochs : 10
+- number of splits : 20
+- batch size : 10
+- double convolution : ELU with bias with dropout TODO
+- up convolution : without dropout 
+- loss function : BCEWithLogitsLoss
+- Optimizer : Adam
+- Scheduler : torch.optim.lr_scheduler.StepLR
+- Scaler :  torch.cuda.amp.GradScaler
+
+### Experiment 9
+- Skip connection : True
+- Number of epochs : 10
+- number of splits : 2
+- batch size : 10
+- double convolution : ELU with bias with dropout TODO
+- up convolution : without dropout 
+- loss function : BCEWithLogitsLoss
+- Optimizer : Adam with weight decay = 1e-04
+- Scheduler : torch.optim.lr_scheduler.StepLR
+- Scaler :  torch.cuda.amp.GradScaler
+
+### Experiment 10
+- Skip connection : True
+- Number of epochs : 10
+- number of splits : 2
+- batch size : 10
+- double convolution : ELU with bias with dropout TODO
+- up convolution : without dropout 
+- loss function : BCEWithLogitsLoss
+- Optimizer : Adam with weight decay = 1e-02
 - Scheduler : torch.optim.lr_scheduler.StepLR
 - Scaler :  torch.cuda.amp.GradScaler
