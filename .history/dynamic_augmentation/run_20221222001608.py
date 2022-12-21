@@ -161,5 +161,5 @@ if __name__ == "__main__":
     if CROSS_VALIDATION:
         run_training(num_epochs, lr, batch_size, device=DEVICE) 
     else:
-        run_training_without_CV(num_epochs, lr, batch_size, device=DEVICE, weighted_sampler=True) 
+        run_training_without_CV(num_epochs, lr, batch_size, device=DEVICE, weighted_sampler=False) 
 

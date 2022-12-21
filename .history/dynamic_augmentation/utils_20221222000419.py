@@ -11,11 +11,9 @@ def save_checkpoint(state, filename="my_checkpoint.pth"):
     print("=> Saving checkpoint")
     torch.save(state, filename)
 
-
 def load_checkpoint(checkpoint, model):
     print("=> Loading checkpoint")
     model.load_state_dict(checkpoint["state_dict"])
-
 
 class RoadDataset(Dataset):
     def __init__(self, image_dir, mask_dir, transform=None):
@@ -48,11 +46,10 @@ class RoadDataset(Dataset):
         else:
             return image, mask
 
-
 def get_transform(train):
-    """implement combined random transformations on training set, 
-    including normalizing, flipping, rotating, random cropping, gaussian blurring. 
-    For testing set, only normalization is applied. 
+    """combine n_patch_x * n_patch_y patches of matrices of size (s1, s2) into a 
+    large matrix of size (s1 + step_x * (n_patch_x - 1), s2 + step_y * (n_patch_y - 1))
+    patches: must be of shape (n_patch_x, n_patch_y, num_channels, s1, s2)
     """
     if train:
         transform_0 = A.Compose(
@@ -98,7 +95,6 @@ def get_transform(train):
 
     return transform
 
-
 class RoadData_test_set(Dataset):
 
     def __init__(self, image_dir, transform=None, test_dir='data/test_images/'):
@@ -123,7 +119,6 @@ class RoadData_test_set(Dataset):
 
         return torch.Tensor(patches).reshape(25, 3, 304, 304)  # (608 - 304) / 76 + 1 = 5
 
-
 def get_test_loader(batch_size, num_workers, pin_memory, test_dir='data/test_images/'):
 
     test_transform = get_transform(train=False)
@@ -142,7 +137,6 @@ def get_test_loader(batch_size, num_workers, pin_memory, test_dir='data/test_ima
     )
 
     return test_loader
-
 
 def combine_patches(patches, n_patch_x, n_patch_y, step_x, step_y, solve_overlap='mean'):
     """combine n_patch_x * n_patch_y patches of matrices of size (s1, s2) into a 

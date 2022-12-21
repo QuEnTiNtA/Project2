@@ -118,11 +118,11 @@ def run_training_without_CV(num_epochs, lr, batch_size, device=DEVICE, weighted_
 
     # ===== Model, Optimizer and Loss function =====   
     model = UNET(in_channels=3, out_channels=1).to(DEVICE)
-    loss_fn = nn.BCEWithLogitsLoss(pos_weight=torch.Tensor([4]).to(DEVICE))  # positive : negative = 1 : 4
-    # loss_fn = nn.BCEWithLogitsLoss()
+    # loss_fn = nn.BCEWithLogitsLoss(pos_weight=torch.Tensor([4]).to(DEVICE))  # positive : negative = 1 : 4
+    loss_fn = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=100)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=500, gamma=0.1)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=100)
+    # scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=500, gamma=0.1)
     scaler = torch.cuda.amp.GradScaler()
 
     # wandb.config.update({'optimizer': optimizer,
@@ -161,5 +161,5 @@ if __name__ == "__main__":
     if CROSS_VALIDATION:
         run_training(num_epochs, lr, batch_size, device=DEVICE) 
     else:
-        run_training_without_CV(num_epochs, lr, batch_size, device=DEVICE, weighted_sampler=True) 
+        run_training_without_CV(num_epochs, lr, batch_size, device=DEVICE, weighted_sampler=False) 
 

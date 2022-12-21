@@ -11,11 +11,9 @@ def save_checkpoint(state, filename="my_checkpoint.pth"):
     print("=> Saving checkpoint")
     torch.save(state, filename)
 
-
 def load_checkpoint(checkpoint, model):
     print("=> Loading checkpoint")
     model.load_state_dict(checkpoint["state_dict"])
-
 
 class RoadDataset(Dataset):
     def __init__(self, image_dir, mask_dir, transform=None):
@@ -47,7 +45,6 @@ class RoadDataset(Dataset):
             return image, image
         else:
             return image, mask
-
 
 def get_transform(train):
     """implement combined random transformations on training set, 
