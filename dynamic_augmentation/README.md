@@ -1,6 +1,6 @@
 # Dynamic Augmentations 
 
-## Functions of files
+## Layouts of files
 `model.py`: For the U-Net architecture. One can modify activation function in line 11, 12, 15, 16, and list of features in line 24 to get desired setting.  
 
 `train.py`: Functions for training the model and image predictions.
@@ -17,8 +17,14 @@
 
 `morphological operations.ipynb`: Experiment morphological transformation such as Open and Close.
 
-## Get the best result
+## Usage
 
+As we accidentally lost the best checkpoint, which was able to reach the F1 score of 91.4% in the AICROWD platform (`https://www.aicrowd.com/challenges/epfl-ml-road-segmentation/submissions/207194`), here we could only provide the second best saved checkpoint (F1 score: 91.3%). It can be accessed in the google drive:
+`https://drive.google.com/drive/folders/1n4wEti1m8xPaQ642XjxU_IkAoviADDys?usp=sharing`  
+One can download the checkpoints to the main and load in `post_processing.py`, then run `mask_to_submission.py` to get the second best final submission.
+
+## Get the best result
+One can reproduce the best F1 score of 91.4% by procedures below.
 ### Generate the best checkpoint 
 In `run.py`:  
 * change the checkpoint_name to your choice 
@@ -39,11 +45,6 @@ Run `post_processing.py` with :
 Run `mask_to_submission.py` with :  
 `dynamic_augmentation/mask_to_submission.py` 
 
-## Usage
-
-As we accidentally lost the best checkpoint, which was able to reach the F1 score of 91.4% in the AICROWD platform (`https://www.aicrowd.com/challenges/epfl-ml-road-segmentation/submissions/207194`), here we could only provide the second best saved checkpoint (F1 score: 91.3%). It can be accessed in the google drive:
-`https://drive.google.com/drive/folders/1n4wEti1m8xPaQ642XjxU_IkAoviADDys?usp=sharing`  
-One can download the checkpoints to the main and load in `post_processing.py`, then run `mask_to_submission.py` to get the second best final submission.
 
 ### Contributors 
 
