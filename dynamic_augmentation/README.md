@@ -2,13 +2,22 @@
 
 ## Functions of files
 `model.py`: For the U-Net architecture. One can modify activation function in line 11, 12, 15, 16, and list of features in line 24 to get desired setting.  
+
 `train.py`: Functions for training the model and image predictions.
+
 `run.py`: Create the checkpoint for the running model.
+
 `post_processing.py`: Patching a small set of predicted images to generate the final predictions.
+
 `mask_to_submission.py`: Create the submission file.
+
 `utils.py`: Functions for running and post_processing.
+
 `find_hard_examples.ipynb`: Identify 20 rather complicated images hard to make predictions.
+
 `morphological operations.ipynb`: Experiment morphological transformation such as Open and Close.
+
+## Get the best result
 
 ### Generate the best checkpoint 
 In `run.py`:  
@@ -30,6 +39,11 @@ Run `post_processing.py` with :
 Run `mask_to_submission.py` with :  
 `dynamic_augmentation/mask_to_submission.py` 
 
+## Usage
+
+The best and the second best saved checkpoint can be accessed in the google drive:
+`https://drive.google.com/drive/folders/1n4wEti1m8xPaQ642XjxU_IkAoviADDys?usp=sharing`  
+One can load the checkpoint in `post_processing.py` and run `mask_to_submission.py` to get the final submission.
 
 ### Contributors 
 
