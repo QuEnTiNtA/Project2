@@ -1,3 +1,38 @@
-# Dynamic augmentation
+# Dynamic Augmentations 
 
-## Post process
+## Functions of files
+`model.py`: For the U-Net architecture. One can modify activation function in line 11, 12, 15, 16, and list of features in line 24 to get desired setting.  
+`train.py`: Functions for training the model and image predictions.
+`run.py`: Create the checkpoint for the running model.
+`post_processing.py`: Patching a small set of predicted images to generate the final predictions.
+`mask_to_submission.py`: Create the submission file.
+`utils.py`: Functions for running and post_processing.
+`find_hard_examples.ipynb`: Identify 20 rather complicated images hard to make predictions.
+`morphological operations.ipynb`: Experiment morphological transformation such as Open and Close.
+
+### Generate the best checkpoint 
+In `run.py`:  
+* change the checkpoint_name to your choice 
+
+Run `run.py` with :  
+`dynamic_augmentation/run.py`  
+
+The total running time is around 10 hours.
+
+### Generate the best predicted test images 
+In `post_processing.py`:  
+* load your saved checkpoint in line 10 
+
+Run `post_processing.py` with :  
+`dynamic_augmentation/post_processing.py`  
+
+### Generate the best submission file
+Run `mask_to_submission.py` with :  
+`dynamic_augmentation/mask_to_submission.py` 
+
+
+### Contributors 
+
+* Mathieu Marchand
+* Kieran Vaudaux
+* Wanting Li
