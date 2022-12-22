@@ -1,6 +1,11 @@
 # Static augmentation
 
 ## Step to run the run.py
+Python environment : To run the scripts, you will need to install : 
+- pytorch : used to build the neural network and run it
+- Albumentation : for the image dataset
+- tqdm : To show the progress as a progress bar
+
 To run the run.py file, go to the trained_model folder and unzip the best_model3.zip file. It was too big to be pushed as a whole.
 
 Run all the cells to generate the output masks for the prediction.
