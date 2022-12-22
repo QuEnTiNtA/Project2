@@ -12,8 +12,8 @@ class DoubleConv(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv2d(out_channels, out_channels, 3, 1, 1, bias=False),
             nn.BatchNorm2d(out_channels),
-            # nn.ELU(inplace=True),
-            nn.ReLU(inplace=True),
+            nn.ELU(inplace=True),
+            # nn.ReLU(inplace=True),
         )
 
     def forward(self, x):
