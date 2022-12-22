@@ -19,7 +19,7 @@ pin_memory = True
 load_model = False
 # load_model = True
 k = 5
-checkpoint_name = 'checkpoint_best.pth'
+checkpoint_name = 'checkpoint_wbce_hard_StepLR1e-4_ReLU.pth'
 
 def run_training(num_epochs, lr, batch_size, device=DEVICE):
     # ===== Data Loading =====

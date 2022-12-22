@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     DEVICE = 'cuda:0'
     model = UNET(in_channels=3, out_channels=1).to(DEVICE)
-    load_checkpoint(torch.load("checkpoint_best.pth", map_location='cpu'), model)
+    load_checkpoint(torch.load("checkpoint_wbce_hard_StepLR1e-4_ReLU.pth", map_location='cpu'), model)
     model.eval()
 
     loader = get_test_loader(batch_size=1, num_workers=1, pin_memory=False)
