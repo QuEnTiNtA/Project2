@@ -43,7 +43,7 @@ Run `mask_to_submission.py` with :
 
 The best and the second best saved checkpoint can be accessed in the google drive:
 `https://drive.google.com/drive/folders/1n4wEti1m8xPaQ642XjxU_IkAoviADDys?usp=sharing`  
-One can load the checkpoint in `post_processing.py` and run `mask_to_submission.py` to get the final submission.
+One can download the checkpoints to the main and load in `post_processing.py`, then run `mask_to_submission.py` to get the final submission.
 
 ### Contributors 
 
