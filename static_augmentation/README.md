@@ -43,7 +43,7 @@ Below, you will find all the configurations tested :
 ### Experiment 1
 - Skip connection : True
 - Number of epochs : 10
-- number of splits : 2
+- kfold : 2
 - batch size : 10
 - double convolution : ELU with bias
 - up convolution : without dropout 
@@ -55,7 +55,7 @@ Below, you will find all the configurations tested :
 ### Experiment 2
 - Skip connection : False
 - Number of epochs : 10
-- number of splits : 2
+- kfold : 2
 - batch size : 10
 - double convolution : RELU without bias
 - up convolution : without dropout 
@@ -67,7 +67,7 @@ Below, you will find all the configurations tested :
 ### Experiment 3
 - Skip connection : False
 - Number of epochs : 10
-- number of splits : 2
+- kfold : 2
 - batch size : 10
 - double convolution : RELU with bias
 - up convolution : without dropout 
@@ -79,7 +79,7 @@ Below, you will find all the configurations tested :
 ### Experiment 4
 - Skip connection : False
 - Number of epochs : 10
-- number of splits : 2
+- kfold : 2
 - batch size : 10
 - double convolution : RELU without bias
 - up convolution : without dropout with bias
@@ -91,7 +91,7 @@ Below, you will find all the configurations tested :
 ### Experiment 5
 - Skip connection : True
 - Number of epochs : 10
-- number of splits : 2
+- kfold : 2
 - batch size : 10
 - double convolution : ELU without bias with dropout 0.2
 - up convolution : without dropout with bias
@@ -103,7 +103,7 @@ Below, you will find all the configurations tested :
 ### Experiment 6
 - Skip connection : True
 - Number of epochs : 10
-- number of splits : 2
+- kfold : 2
 - batch size : 10
 - double convolution : ELU without bias with dropout 0.5
 - up convolution : without dropout 
@@ -115,7 +115,7 @@ Below, you will find all the configurations tested :
 ### Experiment 7
 - Skip connection : True
 - Number of epochs : 10
-- number of splits : 1
+- kfold : 1
 - batch size : 10
 - double convolution : ELU with bias with dropout TODO
 - up convolution : without dropout 
@@ -127,7 +127,7 @@ Below, you will find all the configurations tested :
 ### Experiment 8
 - Skip connection : True
 - Number of epochs : 10
-- number of splits : 20
+- kfold : 20
 - batch size : 10
 - double convolution : ELU with bias with dropout TODO
 - up convolution : without dropout 
@@ -139,7 +139,7 @@ Below, you will find all the configurations tested :
 ### Experiment 9
 - Skip connection : True
 - Number of epochs : 10
-- number of splits : 2
+- kfold : 2
 - batch size : 10
 - double convolution : ELU with bias with dropout TODO
 - up convolution : without dropout 
@@ -151,7 +151,7 @@ Below, you will find all the configurations tested :
 ### Experiment 10
 - Skip connection : True
 - Number of epochs : 10
-- number of splits : 2
+- kfold : 2
 - batch size : 10
 - double convolution : ELU with bias with dropout TODO
 - up convolution : without dropout 
