@@ -1,5 +1,26 @@
 # Static augmentation
 
+## Step to run the run.py
+To run the run.py file, go to the trained_model folder and unzip the best_model3.zip file. It was too big to be pushed as a whole.
+
+Run all the cells to generate the output masks for the prediction.
+
+## Layout of the folders
+
+`data` : Contains all the input data from the dataset
+
+`experiments` : Contains the experiment files that contain the experiments made
+
+`predict_mask` : Contains the results of the predictions
+
+`result_exp` : Contains the results from the experiences
+
+`submission` : Contains submission files for aicrowd
+
+`trained_model` : Contains the models trained, stored to be used to generate masks
+
+`utils` : Contains helper functions for the project
+
 ## Data augmentation
 For the data augmentation, we implemented a transformer for the data with a combination of the following transformations :
 - Resize image : resize the image to dimension of 600 X 600
