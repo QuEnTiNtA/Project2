@@ -40,8 +40,7 @@ class RoadDataset(Dataset):
         image = np.array(Image.open(img_path).convert("RGB"))
         mask = np.array(Image.open(mask_path).convert("L"), dtype=np.float32) # grayscale
         mask = np.where(mask > 4.0, 1.0, 0.0)
-        # mask[mask == 237.0] = 1.0 # white --> 1, implement sigmoid as the last activation. rgb(0,0,0): black, rgb(255, 255, 255):
-
+       
         if self.transform_both is not None:
             augmentations = self.transform_both(image=image, mask=mask)
             image = augmentations["image"]

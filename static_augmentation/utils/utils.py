@@ -20,6 +20,9 @@ def load_checkpoint(checkpoint, model):
     print("=> Loading checkpoint")
     model.load_state_dict(checkpoint["state_dict"])
 
+"""
+Definition of the dataset
+"""
 class RoadDataset(Dataset):
     def __init__(self, image_dir, mask_dir, transform=None):
         self.image_dir = image_dir
@@ -36,8 +39,7 @@ class RoadDataset(Dataset):
         image = np.array(Image.open(img_path).convert("RGB"))
         mask = np.array(Image.open(mask_path).convert("L"), dtype=np.float32) # grayscale
         mask = np.where(mask > 4.0, 1.0, 0.0)
-        # mask[mask == 237.0] = 1.0 # white --> 1, implement sigmoid as the last activation. rgb(0,0,0): black, rgb(255, 255, 255):
-
+        
         if self.transform is not None:
             augmentations = self.transform(image=image, mask=mask)
             image = augmentations["image"]
@@ -74,7 +76,7 @@ def get_transform(
         transformations.append(A.Normalize(
             mean=[0.0, 0.0, 0.0],
             std=[1.0, 1.0, 1.0],
-            max_pixel_value=237.0, # dividing by 237, get a value between 0 and 1
+            max_pixel_value=255.0,
         ))
     if(cwidth > 0):
         transformations.append(A.RandomCrop(width=cwidth, height=cheight))

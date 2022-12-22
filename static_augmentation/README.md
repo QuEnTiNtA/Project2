@@ -2,10 +2,10 @@
 
 ## Data augmentation
 For the data augmentation, we implemented a transformer for the data with a combination of the following transformations :
-- Resize image : resize the image to dimension of newHight X newWidth
-- Flip : Flip the image horizontally and vertically with a probability p (for each axe)
-- Rotation : Apply a rotation to the image from [-angle;+angle]
-- Normalization : normalization to mean = 0, std = 1 and with max pixel value of 237 (maximum value of a pixel in the dataset)
+- Resize image : resize the image to dimension of 600 X 600
+- Flip : Flip the image horizontally (p = 0.5) and vertically (p = 0.1)
+- Rotation : Apply a rotation to the image from [-35;+35]
+- Normalization : normalization to mean = 0, std = 1 and with max pixel value of 255 
 
 ## Testing different configurations
 The experimented neural network was a UNet. Different tests were made to determine the hyper parameters of the UNet such as the activation function, the use of bias, skipping some connections, or the activation function (not exhaustive).
